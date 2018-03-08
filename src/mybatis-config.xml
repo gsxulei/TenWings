@@ -7,6 +7,7 @@
 	<environments default="development">
 		<environment id="development">
 			<transactionManager type="JDBC"/>
+			<!--UNPOOLED 是关闭连接池，POOLED 是打开连接池-->
 			<dataSource type="POOLED">
 				<property name="driver" value="${driver}"/>
 				<property name="url" value="${url}"/>
@@ -18,5 +19,6 @@
 	<mappers>
 		<!-- <mapper resource="org/mybatis/example/BlogMapper.xml"/> -->
 		<mapper class="com.x62.tw.mapper.DataPluginMapper"/>
+		<mapper class="com.x62.tw.mapper.DataPluginAccessLogMapper"/>
 	</mappers>
 </configuration>

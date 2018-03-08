@@ -12,7 +12,6 @@ import com.x62.tw.dao.DataPluginDao;
 import com.x62.tw.utils.Config;
 import com.x62.tw.utils.IOUtils;
 import com.x62.tw.utils.JsonUtils;
-import com.x62.tw.utils.MyBatisUtils;
 
 public class DataPluginManager
 {
@@ -78,9 +77,7 @@ public class DataPluginManager
 	 */
 	public void initLoad()
 	{
-		MyBatisUtils myBatisUtils=MyBatisUtils.getInstance();
-
-		DataPluginDao dao=new DataPluginDao(myBatisUtils.getFactory());
+		DataPluginDao dao=new DataPluginDao();
 		List<com.x62.tw.dao.bean.DataPluginBean> list=dao.findAll();
 		for(com.x62.tw.dao.bean.DataPluginBean bean:list)
 		{

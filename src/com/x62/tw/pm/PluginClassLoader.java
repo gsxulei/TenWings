@@ -1,6 +1,7 @@
 package com.x62.tw.pm;
 
 import java.io.File;
+import java.net.URL;
 
 import com.x62.tw.utils.IOUtils;
 
@@ -37,5 +38,20 @@ public class PluginClassLoader extends ClassLoader
 	public String toString()
 	{
 		return name;
+	}
+	
+	@Override
+	public URL getResource(String name)
+	{
+		File f=new File(path,name);
+		try
+		{
+			return f.toURI().toURL();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

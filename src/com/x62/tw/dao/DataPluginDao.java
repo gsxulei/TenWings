@@ -9,14 +9,16 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import com.x62.tw.dao.bean.DataPluginBean;
 import com.x62.tw.mapper.DataPluginMapper;
 import com.x62.tw.utils.IOUtils;
+import com.x62.tw.utils.MyBatisUtils;
 
 public class DataPluginDao
 {
 	private SqlSessionFactory factory;
 
-	public DataPluginDao(SqlSessionFactory factory)
+	public DataPluginDao()
 	{
-		this.factory=factory;
+		//this.factory=factory;
+		this.factory=MyBatisUtils.getInstance().getFactory();
 	}
 
 	public boolean addOrUpdate(DataPluginBean bean)

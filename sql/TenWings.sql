@@ -11,3 +11,13 @@ CREATE TABLE data_plugin
 	plugin_version INT,/*版本*/
 	path VARCHAR(100)/*路径*/
 )
+
+CREATE TABLE data_plugin_access_log
+(
+	id INT AUTO_INCREMENT PRIMARY KEY,
+	data_plugin_id INT,/*接口id*/
+	access_date BIGINT,/*访问时间*/
+	access_ip VARCHAR(50),/*访问者IP*/
+	access_port INT,/*访问者端口*/
+	result_code INT/*访问结果码*/
+)

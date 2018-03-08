@@ -12,13 +12,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.x62.tw.bean.DataReqParam;
+import com.x62.tw.dao.DataPluginAccessLogDao;
 import com.x62.tw.dao.DataPluginDao;
+import com.x62.tw.dao.bean.DataPluginAccessLogBean;
 import com.x62.tw.pm.DataPluginBean;
 import com.x62.tw.pm.DataPluginManager;
 import com.x62.tw.utils.Config;
 import com.x62.tw.utils.IOUtils;
 import com.x62.tw.utils.JsonUtils;
-import com.x62.tw.utils.MyBatisUtils;
 
 @WebServlet("/API")
 public class ApiServlet extends HttpServlet
@@ -34,7 +35,24 @@ public class ApiServlet extends HttpServlet
 	{
 		request.setCharacterEncoding("utf-8");
 		response.setCharacterEncoding("utf-8");
+		response.setContentType("text/html;charset=utf-8");
+		PrintWriter pw=response.getWriter();
+
+		DataPluginAccessLogDao accessLogDao=new DataPluginAccessLogDao();
+		DataPluginAccessLogBean accessLog=new DataPluginAccessLogBean();
+		accessLog.accessDate=System.currentTimeMillis();
+		accessLog.accessIp=request.getRemoteAddr();
+		accessLog.accessPort=request.getRemotePort();
+
 		String param=request.getParameter("param");
+		if(param==null||"".equals(param))
+		{
+			pw.write("{\"code\":\"1002\",\"msg\":\"参数错误\"}");
+			IOUtils.close(pw);
+			accessLog.resultCode=1002;
+			accessLogDao.add(accessLog);
+			return;
+		}
 		Config sysConfig=Config.getInstance();
 
 		DataReqParam reqParam=JsonUtils.s2o(param,DataReqParam.class);
@@ -43,8 +61,7 @@ public class ApiServlet extends HttpServlet
 
 		if(bean==null)
 		{
-			MyBatisUtils myBatisUtils=MyBatisUtils.getInstance();
-			DataPluginDao dao=new DataPluginDao(myBatisUtils.getFactory());
+			DataPluginDao dao=new DataPluginDao();
 			com.x62.tw.dao.bean.DataPluginBean obj=dao.find(reqParam.name,reqParam.version);
 			if(obj!=null)
 			{
@@ -56,9 +73,10 @@ public class ApiServlet extends HttpServlet
 
 		if(bean==null)
 		{
-			PrintWriter pw=response.getWriter();
-			pw.write("{\"msg\":\"接口名或版本错误\"}");
+			pw.write("{\"code\":\"1003\",\"msg\":\"接口名或版本错误\"}");
 			IOUtils.close(pw);
+			accessLog.resultCode=1003;
+			accessLogDao.add(accessLog);
 			return;
 		}
 
@@ -76,8 +94,13 @@ public class ApiServlet extends HttpServlet
 			e.printStackTrace();
 		}
 
-		PrintWriter pw=response.getWriter();
 		pw.write(result);
 		IOUtils.close(pw);
+
+		DataPluginDao dao=new DataPluginDao();
+		com.x62.tw.dao.bean.DataPluginBean obj=dao.find(reqParam.name,reqParam.version);
+		accessLog.dataPluginId=obj.id;
+		accessLog.resultCode=1000;
+		accessLogDao.add(accessLog);
 	}
 }
