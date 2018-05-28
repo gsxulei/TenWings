@@ -8,8 +8,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.x62.tw.config.Config;
 import com.x62.tw.dao.DataPluginDao;
-import com.x62.tw.utils.Config;
+import com.x62.tw.dao.DataPluginDao.Bean;
 import com.x62.tw.utils.IOUtils;
 import com.x62.tw.utils.JsonUtils;
 
@@ -78,8 +79,8 @@ public class DataPluginManager
 	public void initLoad()
 	{
 		DataPluginDao dao=new DataPluginDao();
-		List<com.x62.tw.dao.bean.DataPluginBean> list=dao.findAll();
-		for(com.x62.tw.dao.bean.DataPluginBean bean:list)
+		List<Bean> list=dao.findAll();
+		for(Bean bean:list)
 		{
 			File file=new File(sysConfig.getDataPluginsPath(),bean.path);
 			add(file.getAbsolutePath());

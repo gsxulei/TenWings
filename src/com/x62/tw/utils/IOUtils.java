@@ -66,6 +66,36 @@ public class IOUtils
 	}
 
 	/**
+	 * 关闭流
+	 * 
+	 * @param closeables
+	 */
+	public static void close(AutoCloseable...closeables)
+	{
+		if(closeables==null)
+		{
+			return;
+		}
+
+		for(AutoCloseable closeable:closeables)
+		{
+			if(closeable==null)
+			{
+				continue;
+			}
+
+			try
+			{
+				closeable.close();
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+		}
+	}
+
+	/**
 	 * 解压zip文件,Java自带的解压有问题,有些文件解压出来大小不对<br/>
 	 * 
 	 * @param from

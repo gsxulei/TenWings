@@ -12,12 +12,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.x62.tw.bean.DataReqParam;
+import com.x62.tw.config.Config;
 import com.x62.tw.dao.DataPluginAccessLogDao;
+import com.x62.tw.dao.DataPluginAccessLogDao.Bean;
 import com.x62.tw.dao.DataPluginDao;
-import com.x62.tw.dao.bean.DataPluginAccessLogBean;
 import com.x62.tw.pm.DataPluginBean;
 import com.x62.tw.pm.DataPluginManager;
-import com.x62.tw.utils.Config;
 import com.x62.tw.utils.IOUtils;
 import com.x62.tw.utils.JsonUtils;
 
@@ -39,18 +39,18 @@ public class ApiServlet extends HttpServlet
 		PrintWriter pw=response.getWriter();
 
 		DataPluginAccessLogDao accessLogDao=new DataPluginAccessLogDao();
-		DataPluginAccessLogBean accessLog=new DataPluginAccessLogBean();
-		accessLog.accessDate=System.currentTimeMillis();
-		accessLog.accessIp=request.getRemoteAddr();
-		accessLog.accessPort=request.getRemotePort();
+		Bean log=new Bean();
+		log.accessDate=System.currentTimeMillis();
+		log.accessIp=request.getRemoteAddr();
+		log.accessPort=request.getRemotePort();
 
 		String param=request.getParameter("param");
 		if(param==null||"".equals(param))
 		{
 			pw.write("{\"code\":\"1002\",\"msg\":\"参数错误\"}");
 			IOUtils.close(pw);
-			accessLog.resultCode=1002;
-			accessLogDao.add(accessLog);
+			log.resultCode=1002;
+			accessLogDao.add(log);
 			return;
 		}
 		Config sysConfig=Config.getInstance();
@@ -62,7 +62,7 @@ public class ApiServlet extends HttpServlet
 		if(bean==null)
 		{
 			DataPluginDao dao=new DataPluginDao();
-			com.x62.tw.dao.bean.DataPluginBean obj=dao.find(reqParam.name,reqParam.version);
+			com.x62.tw.dao.DataPluginDao.Bean obj=dao.find(reqParam.name,reqParam.version);
 			if(obj!=null)
 			{
 				File file=new File(sysConfig.getDataPluginsPath(),obj.path);
@@ -75,8 +75,8 @@ public class ApiServlet extends HttpServlet
 		{
 			pw.write("{\"code\":\"1003\",\"msg\":\"接口名或版本错误\"}");
 			IOUtils.close(pw);
-			accessLog.resultCode=1003;
-			accessLogDao.add(accessLog);
+			log.resultCode=1003;
+			accessLogDao.add(log);
 			return;
 		}
 
@@ -87,7 +87,17 @@ public class ApiServlet extends HttpServlet
 			Method exec=action.getDeclaredMethod(bean.method,String.class);
 
 			Object obj=action.newInstance();
-			result=(String)exec.invoke(obj,reqParam.param);
+			Object resObj=exec.invoke(obj,reqParam.param);
+			if(resObj instanceof String)
+			{
+				result=(String)resObj;
+			}
+			else
+			{
+				result=JsonUtils.o2s(resObj);
+			}
+
+			// result=(String)exec.invoke(obj,reqParam.param);
 		}
 		catch(Exception e)
 		{
@@ -98,9 +108,9 @@ public class ApiServlet extends HttpServlet
 		IOUtils.close(pw);
 
 		DataPluginDao dao=new DataPluginDao();
-		com.x62.tw.dao.bean.DataPluginBean obj=dao.find(reqParam.name,reqParam.version);
-		accessLog.dataPluginId=obj.id;
-		accessLog.resultCode=1000;
-		accessLogDao.add(accessLog);
+		com.x62.tw.dao.DataPluginDao.Bean obj=dao.find(reqParam.name,reqParam.version);
+		log.dataPluginId=obj.id;
+		log.resultCode=1000;
+		accessLogDao.add(log);
 	}
 }

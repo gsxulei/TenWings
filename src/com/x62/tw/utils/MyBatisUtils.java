@@ -1,9 +1,6 @@
 package com.x62.tw.utils;
 
 import java.io.InputStream;
-import java.sql.DriverManager;
-
-import javax.sql.DataSource;
 
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -23,14 +20,16 @@ public class MyBatisUtils
 		try
 		{
 			String resource="mybatis-config.xml";
-			InputStream inputStream=Resources.getResourceAsStream(resource);
-			factory=new SqlSessionFactoryBuilder().build(inputStream);
+			InputStream is=Resources.getResourceAsStream(resource);
+			factory=new SqlSessionFactoryBuilder().build(is);
+			// Configuration config=factory.getConfiguration();
+			// config.addMapper(com.x62.tw.dao.DataPluginAccessLogDao.Mapper.class);
+			// config.addMapper(com.x62.tw.dao.DataPluginDao.Mapper.class);
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
 		}
-
 	}
 
 	public static MyBatisUtils getInstance()
@@ -43,21 +42,21 @@ public class MyBatisUtils
 		return factory;
 	}
 
-	public void close()
-	{
-		DataSource ds=factory.getConfiguration().getEnvironment().getDataSource();
-		System.out.println(ds);
-
-		try
-		{
-			while(DriverManager.getDrivers().hasMoreElements())
-			{
-				DriverManager.deregisterDriver(DriverManager.getDrivers().nextElement());
-			}
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
-	}
+//	public void close()
+//	{
+//		DataSource ds=factory.getConfiguration().getEnvironment().getDataSource();
+//		System.out.println(ds);
+//
+//		try
+//		{
+//			while(DriverManager.getDrivers().hasMoreElements())
+//			{
+//				DriverManager.deregisterDriver(DriverManager.getDrivers().nextElement());
+//			}
+//		}
+//		catch(Exception e)
+//		{
+//			e.printStackTrace();
+//		}
+//	}
 }

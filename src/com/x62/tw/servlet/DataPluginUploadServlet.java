@@ -12,10 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
+import com.x62.tw.config.Config;
 import com.x62.tw.dao.DataPluginDao;
-import com.x62.tw.dao.bean.DataPluginBean;
 import com.x62.tw.pm.DataPluginManager;
-import com.x62.tw.utils.Config;
 import com.x62.tw.utils.IOUtils;
 import com.x62.tw.utils.JsonUtils;
 
@@ -57,7 +56,7 @@ public class DataPluginUploadServlet extends HttpServlet
 
 		File config=new File(to,"config.json");
 		String json=IOUtils.readFile(config.getAbsolutePath());
-		DataPluginBean bean=JsonUtils.s2o(json,DataPluginBean.class);
+		com.x62.tw.dao.DataPluginDao.Bean bean=JsonUtils.s2o(json,com.x62.tw.dao.DataPluginDao.Bean.class);
 		bean.path=filename+File.separator+_name;
 
 		DataPluginManager dpm=DataPluginManager.getInstance();

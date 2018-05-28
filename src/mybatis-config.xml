@@ -18,7 +18,9 @@
 	</environments>
 	<mappers>
 		<!-- <mapper resource="org/mybatis/example/BlogMapper.xml"/> -->
-		<mapper class="com.x62.tw.mapper.DataPluginMapper"/>
-		<mapper class="com.x62.tw.mapper.DataPluginAccessLogMapper"/>
+		<!-- <mapper class="com.x62.tw.mapper.DataPluginMapper"/> -->
+		<!-- <mapper class="com.x62.tw.mapper.DataPluginAccessLogMapper"/> -->
+		<mapper class="com.x62.tw.dao.DataPluginAccessLogDao$Mapper"/>
+		<mapper class="com.x62.tw.dao.DataPluginDao$Mapper"/>
 	</mappers>
 </configuration>

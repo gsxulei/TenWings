@@ -3,11 +3,16 @@ package com.x62.tw.dao;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Result;
+import org.apache.ibatis.annotations.Results;
+import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
-import com.x62.tw.dao.bean.DataPluginBean;
-import com.x62.tw.mapper.DataPluginMapper;
+import com.x62.tw.bean.BaseBean;
 import com.x62.tw.utils.IOUtils;
 import com.x62.tw.utils.MyBatisUtils;
 
@@ -17,16 +22,15 @@ public class DataPluginDao
 
 	public DataPluginDao()
 	{
-		//this.factory=factory;
 		this.factory=MyBatisUtils.getInstance().getFactory();
 	}
 
-	public boolean addOrUpdate(DataPluginBean bean)
+	public boolean addOrUpdate(Bean bean)
 	{
 		boolean result=true;
 		try
 		{
-			DataPluginBean obj=find(bean.name,bean.version);
+			Bean obj=find(bean.name,bean.version);
 			if(obj==null)
 			{
 				result=add(bean);
@@ -44,13 +48,13 @@ public class DataPluginDao
 		return result;
 	}
 
-	public boolean add(DataPluginBean bean)
+	public boolean add(Bean bean)
 	{
 		boolean result=true;
 		SqlSession session=factory.openSession();
 		try
 		{
-			DataPluginMapper mapper=session.getMapper(DataPluginMapper.class);
+			Mapper mapper=session.getMapper(Mapper.class);
 			mapper.add(bean);
 			session.commit();
 		}
@@ -72,7 +76,7 @@ public class DataPluginDao
 		SqlSession session=factory.openSession();
 		try
 		{
-			DataPluginMapper mapper=session.getMapper(DataPluginMapper.class);
+			Mapper mapper=session.getMapper(Mapper.class);
 			mapper.updatePath(path,name,version);
 			session.commit();
 		}
@@ -88,14 +92,14 @@ public class DataPluginDao
 		return result;
 	}
 
-	public DataPluginBean find(String name,int version)
+	public Bean find(String name,int version)
 	{
-		DataPluginBean bean=null;
+		Bean bean=null;
 		SqlSession session=factory.openSession();
 		try
 		{
-			DataPluginMapper mapper=session.getMapper(DataPluginMapper.class);
-			List<DataPluginBean> list=mapper.find(name,version);
+			Mapper mapper=session.getMapper(Mapper.class);
+			List<Bean> list=mapper.find(name,version);
 			if(list!=null&&list.size()>0)
 			{
 				bean=list.get(0);
@@ -112,13 +116,13 @@ public class DataPluginDao
 		return bean;
 	}
 
-	public List<DataPluginBean> findAll()
+	public List<Bean> findAll()
 	{
-		List<DataPluginBean> list=new ArrayList<DataPluginBean>();
+		List<Bean> list=new ArrayList<Bean>();
 		SqlSession session=factory.openSession();
 		try
 		{
-			DataPluginMapper mapper=session.getMapper(DataPluginMapper.class);
+			Mapper mapper=session.getMapper(Mapper.class);
 			list=mapper.findAll();
 		}
 		catch(Exception e)
@@ -130,5 +134,30 @@ public class DataPluginDao
 			IOUtils.close(session);
 		}
 		return list;
+	}
+
+	public static class Bean extends BaseBean
+	{
+		public int id;
+		public String name;
+		public int version;
+		public String path;
+	}
+
+	public interface Mapper
+	{
+		@Insert("insert into data_plugin(plugin_name,plugin_version,path) values(#{name},#{version},#{path})")
+		void add(Bean bean);
+
+		@Update("update data_plugin set path=#{path} where plugin_name=#{name} and plugin_version=#{version}")
+		void updatePath(@Param("path") String path,@Param("name") String name,@Param("version") int version);
+
+		@Select("select * from data_plugin")
+		@Results({@Result(property="name",column="plugin_name"),@Result(property="version",column="plugin_version")})
+		List<Bean> findAll();
+
+		@Select("select * from data_plugin where plugin_name=#{name} and plugin_version=#{version}")
+		@Results({@Result(property="name",column="plugin_name"),@Result(property="version",column="plugin_version")})
+		List<Bean> find(@Param("name") String name,@Param("version") int version);
 	}
 }

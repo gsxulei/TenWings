@@ -1,0 +1,7 @@
+{
+	"appData":"F:\\TenWings",
+	"centerManager":"http://127.0.0.1:8080/TenWings",
+	"updateWhiteList":["127.0.0.1"],
+	"dataAccessWhiteList":["127.0.0.1"],
+	"group":["http://127.0.0.1:8080"]
+}
