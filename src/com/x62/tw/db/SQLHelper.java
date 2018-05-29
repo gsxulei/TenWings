@@ -1,20 +1,16 @@
 package com.x62.tw.db;
 
-import com.google.gson.Gson;
-import com.x62.tw.db.ConnectionUtils.Options;
-import com.x62.tw.utils.IOUtils;
-
 public abstract class SQLHelper
 {
 	private final int version;
 	private int oldVersion=1;
 	private DataBase db;
-	private Options options;
+	private DataBaseConfig options;
 
 	public SQLHelper(int version)
 	{
 		this.version=version;
-		options=getOptions(getConfig());
+		options=getOptions();
 		db=new DataBase(options);
 		checkVersion();
 	}
@@ -33,17 +29,9 @@ public abstract class SQLHelper
 		if(version>oldVersion)
 		{
 			db.execSQL("USE "+options.dbName+";");
-			onUpgrade(db,oldVersion,version);
+			onUpgrade(db,oldVersion);
 			db.execSQL("update config set config_value='"+version+"' where config_key='version'");
 		}
-	}
-
-	public Options getOptions(String dbConfigPath)
-	{
-		String json=IOUtils.readFile(dbConfigPath);
-		Gson gson=new Gson();
-		Options options=gson.fromJson(json,Options.class);
-		return options;
 	}
 
 	protected DataBase getDataBase()
@@ -67,7 +55,7 @@ public abstract class SQLHelper
 	 * @param newVersion
 	 *            新版本号
 	 */
-	public abstract void onUpgrade(DataBase db,int oldVersion,int newVersion);
+	public abstract void onUpgrade(DataBase db,int oldVersion);
 
-	public abstract String getConfig();
+	public abstract DataBaseConfig getOptions();
 }

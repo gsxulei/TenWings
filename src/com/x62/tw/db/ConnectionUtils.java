@@ -10,18 +10,18 @@ public class ConnectionUtils
 	 * 
 	 * @return Connection
 	 */
-	public static Connection getConnection(Options options,boolean database)
+	public static Connection getConnection(DataBaseConfig config,boolean database)
 	{
 		Connection conn=null;
 		try
 		{
-			String url="jdbc:mysql://"+options.ip+":"+options.port+"/";
+			String url="jdbc:mysql://"+config.ip+":"+config.port+"/";
 			if(database)
 			{
-				url+=options.dbName+"?useUnicode=true&characterEncoding=utf-8";
+				url+=config.dbName+"?useUnicode=true&characterEncoding=utf-8";
 			}
-			Class.forName(options.driver);
-			conn=DriverManager.getConnection(url,options.username,options.password);
+			Class.forName(config.driver);
+			conn=DriverManager.getConnection(url,config.username,config.password);
 		}
 		catch(Exception e)
 		{
@@ -30,7 +30,7 @@ public class ConnectionUtils
 		return conn;
 	}
 
-	public static Connection getConnection(Options options)
+	public static Connection getConnection(DataBaseConfig options)
 	{
 		return getConnection(options,true);
 	}
@@ -81,32 +81,4 @@ public class ConnectionUtils
 	// e.printStackTrace();
 	// }
 	// }
-
-	public static class Options
-	{
-		/**
-		 * 数据库驱动字符串,默认为MySQL
-		 */
-		public String driver="com.mysql.jdbc.Driver";
-
-		/**
-		 * 数据库连接URL
-		 */
-		// public String url;
-		public String ip;
-
-		public String port="3306";
-
-		/**
-		 * 数据库用户名
-		 */
-		public String username;
-
-		/**
-		 * 数据库密码
-		 */
-		public String password;
-
-		public String dbName;
-	}
 }

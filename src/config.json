@@ -3,5 +3,24 @@
 	"centerManager":"http://127.0.0.1:8080/TenWings",
 	"updateWhiteList":["127.0.0.1"],
 	"dataAccessWhiteList":["127.0.0.1"],
-	"group":["http://127.0.0.1:8080"]
+	"group":["http://127.0.0.1:8080"],
+
+	"dbs":
+	[
+		{
+			"configName":"db",
+			"ip":"127.0.0.1",
+			"username":"root",
+			"password":"123456",
+			"dbName":"shunxin"
+		},
+
+		{
+			"configName":"twdb",
+			"ip":"127.0.0.1",
+			"username":"root",
+			"password":"123456",
+			"dbName":"ten_wings"
+		}
+	]
 }

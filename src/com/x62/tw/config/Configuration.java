@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.x62.tw.bean.BaseBean;
+import com.x62.tw.db.DataBaseConfig;
 
 /**
  * 配置,对应于config.json文件
@@ -37,4 +38,20 @@ public class Configuration extends BaseBean
 	 * 负载均衡
 	 */
 	public List<String> group=new ArrayList<>();
+
+	public List<DataBaseConfig> dbs=new ArrayList<>();
+
+	public DataBaseConfig getOptions(String name)
+	{
+		DataBaseConfig options=null;
+		for(DataBaseConfig opt:dbs)
+		{
+			if(opt.configName.equals(name))
+			{
+				options=opt;
+				break;
+			}
+		}
+		return options;
+	}
 }

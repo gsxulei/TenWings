@@ -32,12 +32,12 @@ public class MyBatisUtils
 		}
 	}
 
-	public static MyBatisUtils getInstance()
+	public static MyBatisUtils getInstance1()
 	{
 		return Loader.INSTANCE;
 	}
 
-	public SqlSessionFactory getFactory()
+	public SqlSessionFactory getFactory1()
 	{
 		return factory;
 	}

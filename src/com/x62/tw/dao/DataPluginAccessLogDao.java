@@ -2,19 +2,22 @@ package com.x62.tw.dao;
 
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
 
+import com.x62.tw.TenWingsDao;
 import com.x62.tw.bean.BaseBean;
 import com.x62.tw.utils.IOUtils;
-import com.x62.tw.utils.MyBatisUtils;
 
-public class DataPluginAccessLogDao
+public class DataPluginAccessLogDao extends TenWingsDao
 {
-	private SqlSessionFactory factory;
-
 	public DataPluginAccessLogDao()
 	{
-		this.factory=MyBatisUtils.getInstance().getFactory();
+		super("twdb");
+	}
+
+	@Override
+	public Class<?>[] getMappers()
+	{
+		return new Class<?>[]{Mapper.class};
 	}
 
 	public boolean add(Bean bean)

@@ -2,6 +2,7 @@ package com.x62.tw.servlet;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.UUID;
 
 import javax.servlet.ServletException;
@@ -13,13 +14,15 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
 import com.x62.tw.config.Config;
+import com.x62.tw.config.Configuration;
 import com.x62.tw.dao.DataPluginDao;
 import com.x62.tw.pm.DataPluginManager;
+import com.x62.tw.result.BaseResult;
 import com.x62.tw.utils.IOUtils;
 import com.x62.tw.utils.JsonUtils;
 
 @MultipartConfig
-@WebServlet("/DataPluginUploadServlet")
+@WebServlet("/plugin")
 public class DataPluginUploadServlet extends HttpServlet
 {
 	private static final long serialVersionUID=1L;
@@ -31,10 +34,21 @@ public class DataPluginUploadServlet extends HttpServlet
 
 	protected void doPost(HttpServletRequest request,HttpServletResponse response) throws ServletException,IOException
 	{
+		PrintWriter pw=response.getWriter();
 		Config sysConfig=Config.getInstance();
-		String root=sysConfig.getDataPluginsPath();
+		String ip=request.getRemoteHost();
+		Configuration configuration=sysConfig.getConfiguration();
+		if(!configuration.updateWhiteList.contains(ip))
+		{
+			BaseResult result=BaseResult.getError("非法IP");
+			pw.write(result.toString());
+			IOUtils.close(pw);
+			return;
+		}
+
 		// request.getServletContext().getRealPath("WEB-INF/plugins");
 
+		String root=sysConfig.getDataPluginsPath();
 		Part part=request.getPart("file");
 		String cd=part.getHeader("Content-Disposition");
 		// 截取不同类型的文件需要自行判断
@@ -55,8 +69,7 @@ public class DataPluginUploadServlet extends HttpServlet
 		IOUtils.unzip(from,to);
 
 		File config=new File(to,"config.json");
-		String json=IOUtils.readFile(config.getAbsolutePath());
-		com.x62.tw.dao.DataPluginDao.Bean bean=JsonUtils.s2o(json,com.x62.tw.dao.DataPluginDao.Bean.class);
+		com.x62.tw.dao.DataPluginDao.Bean bean=JsonUtils.s2o(config,com.x62.tw.dao.DataPluginDao.Bean.class);
 		bean.path=filename+File.separator+_name;
 
 		DataPluginManager dpm=DataPluginManager.getInstance();

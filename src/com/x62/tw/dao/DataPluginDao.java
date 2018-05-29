@@ -10,19 +10,22 @@ import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
 
+import com.x62.tw.TenWingsDao;
 import com.x62.tw.bean.BaseBean;
 import com.x62.tw.utils.IOUtils;
-import com.x62.tw.utils.MyBatisUtils;
 
-public class DataPluginDao
+public class DataPluginDao extends TenWingsDao
 {
-	private SqlSessionFactory factory;
-
 	public DataPluginDao()
 	{
-		this.factory=MyBatisUtils.getInstance().getFactory();
+		super("twdb");
+	}
+
+	@Override
+	public Class<?>[] getMappers()
+	{
+		return new Class<?>[]{Mapper.class};
 	}
 
 	public boolean addOrUpdate(Bean bean)
@@ -153,11 +156,13 @@ public class DataPluginDao
 		void updatePath(@Param("path") String path,@Param("name") String name,@Param("version") int version);
 
 		@Select("select * from data_plugin")
-		@Results({@Result(property="name",column="plugin_name"),@Result(property="version",column="plugin_version")})
+		@Results(
+		{@Result(property="name",column="plugin_name"),@Result(property="version",column="plugin_version")})
 		List<Bean> findAll();
 
 		@Select("select * from data_plugin where plugin_name=#{name} and plugin_version=#{version}")
-		@Results({@Result(property="name",column="plugin_name"),@Result(property="version",column="plugin_version")})
+		@Results(
+		{@Result(property="name",column="plugin_name"),@Result(property="version",column="plugin_version")})
 		List<Bean> find(@Param("name") String name,@Param("version") int version);
 	}
 }

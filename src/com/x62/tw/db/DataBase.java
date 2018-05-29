@@ -4,14 +4,13 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-import com.x62.tw.db.ConnectionUtils.Options;
 import com.x62.tw.utils.IOUtils;
 
 public class DataBase
 {
-	private Options options;
+	private DataBaseConfig options;
 
-	public DataBase(Options options)
+	public DataBase(DataBaseConfig options)
 	{
 		this.options=options;
 	}
