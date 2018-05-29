@@ -1,0 +1,5 @@
+{
+	"name":"GoodsAdd",
+	"version":1,
+	"action":"com.x62.goods.add.v1.GoodsAdd"
+}
