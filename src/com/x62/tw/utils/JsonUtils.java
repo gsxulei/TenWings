@@ -12,6 +12,12 @@ import com.google.gson.Gson;
  */
 public class JsonUtils
 {
+	public static Gson getGson()
+	{
+		Gson gson=new Gson();
+		return gson;
+	}
+
 	/**
 	 * 对象转字符串
 	 * 
@@ -21,7 +27,7 @@ public class JsonUtils
 	 */
 	public static <T> String o2s(T t)
 	{
-		Gson gson=new Gson();
+		Gson gson=getGson();
 		return gson.toJson(t);
 	}
 
@@ -32,14 +38,14 @@ public class JsonUtils
 		return gson.fromJson(json,t);
 	}
 
-	public static <T> T s2oFromFile(String path,Class<T> t)
+	public static <T> T f2o(String path,Class<T> t)
 	{
 		String json=IOUtils.readFile(path);
 		return s2o(json,t);
 	}
 
-	public static <T> T s2o(File file,Class<T> t)
+	public static <T> T f2o(File file,Class<T> t)
 	{
-		return s2oFromFile(file.getAbsolutePath(),t);
+		return f2o(file.getAbsolutePath(),t);
 	}
 }

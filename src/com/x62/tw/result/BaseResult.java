@@ -1,6 +1,6 @@
 package com.x62.tw.result;
 
-import com.x62.tw.bean.BaseBean;
+import com.x62.tw.base.BaseBean;
 
 public class BaseResult extends BaseBean
 {
@@ -20,5 +20,10 @@ public class BaseResult extends BaseBean
 	public static BaseResult getError(String msg)
 	{
 		return new BaseResult(ERROR,msg);
+	}
+
+	public static BaseResult getSuccess(String msg)
+	{
+		return new BaseResult(OK,msg);
 	}
 }

@@ -3,8 +3,8 @@ package com.x62.tw.dao;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.session.SqlSession;
 
-import com.x62.tw.TenWingsDao;
-import com.x62.tw.bean.BaseBean;
+import com.x62.tw.base.BaseBean;
+import com.x62.tw.base.db.TenWingsDao;
 import com.x62.tw.utils.IOUtils;
 
 public class DataPluginAccessLogDao extends TenWingsDao

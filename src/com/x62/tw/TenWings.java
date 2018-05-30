@@ -1,8 +1,8 @@
 package com.x62.tw;
 
+import com.x62.tw.base.db.DataBaseConfig;
 import com.x62.tw.config.Config;
 import com.x62.tw.config.Configuration;
-import com.x62.tw.db.DataBaseConfig;
 
 public class TenWings
 {
@@ -27,7 +27,7 @@ public class TenWings
 
 	public DataBaseConfig getOptions(String configName)
 	{
-		return configuration.getOptions(configName);
+		return configuration.getConfig(configName);
 	}
 
 	public static TenWings getInstance()

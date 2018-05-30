@@ -128,6 +128,15 @@ public class IOUtils
 					continue;
 				}
 				File file=new File(to,name);
+
+				//使用Eclipse导出时会产生META-INF/MANIFEST.MF文件
+				//但是没有识别出父目录,需要判断并创建
+				File parent=new File(file.getParent());
+				if(!parent.exists())
+				{
+					parent.mkdirs();
+				}
+
 				byte[] buffer=new byte[1024*100];
 				os=new FileOutputStream(file);
 				int len=-1;

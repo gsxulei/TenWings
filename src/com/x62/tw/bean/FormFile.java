@@ -1,5 +1,7 @@
 package com.x62.tw.bean;
 
+import com.x62.tw.base.BaseBean;
+
 public class FormFile extends BaseBean
 {
 	/**

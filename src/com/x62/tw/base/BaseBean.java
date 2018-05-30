@@ -1,4 +1,4 @@
-package com.x62.tw.bean;
+package com.x62.tw.base;
 
 import com.x62.tw.utils.JsonUtils;
 

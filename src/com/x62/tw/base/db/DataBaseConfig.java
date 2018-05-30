@@ -1,4 +1,4 @@
-package com.x62.tw.db;
+package com.x62.tw.base.db;
 
 public class DataBaseConfig
 {
@@ -28,7 +28,7 @@ public class DataBaseConfig
 	/**
 	 * 数据库名称
 	 */
-	public String dbName;
+	public String dbName="";
 
-	public String configName;
+	public String id;
 }

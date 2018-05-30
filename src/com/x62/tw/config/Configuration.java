@@ -3,8 +3,8 @@ package com.x62.tw.config;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.x62.tw.bean.BaseBean;
-import com.x62.tw.db.DataBaseConfig;
+import com.x62.tw.base.BaseBean;
+import com.x62.tw.base.db.DataBaseConfig;
 
 /**
  * 配置,对应于config.json文件
@@ -41,12 +41,12 @@ public class Configuration extends BaseBean
 
 	public List<DataBaseConfig> dbs=new ArrayList<>();
 
-	public DataBaseConfig getOptions(String name)
+	public DataBaseConfig getConfig(String id)
 	{
 		DataBaseConfig options=null;
 		for(DataBaseConfig opt:dbs)
 		{
-			if(opt.configName.equals(name))
+			if(opt.id.equals(id))
 			{
 				options=opt;
 				break;

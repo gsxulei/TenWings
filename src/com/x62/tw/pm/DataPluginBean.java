@@ -2,7 +2,7 @@ package com.x62.tw.pm;
 
 import java.net.URLClassLoader;
 
-import com.x62.tw.bean.BaseBean;
+import com.x62.tw.base.BaseBean;
 
 public class DataPluginBean extends BaseBean
 {

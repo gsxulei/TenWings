@@ -8,7 +8,14 @@
 	"dbs":
 	[
 		{
-			"configName":"db",
+			"id":"LOCAL_MySQL",
+			"ip":"127.0.0.1",
+			"username":"root",
+			"password":"123456"
+		},
+
+		{
+			"id":"db",
 			"ip":"127.0.0.1",
 			"username":"root",
 			"password":"123456",
@@ -16,7 +23,7 @@
 		},
 
 		{
-			"configName":"twdb",
+			"id":"twdb",
 			"ip":"127.0.0.1",
 			"username":"root",
 			"password":"123456",

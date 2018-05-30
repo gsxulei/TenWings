@@ -1,10 +1,9 @@
-package com.x62.tw;
+package com.x62.tw.base.db;
 
 import org.apache.ibatis.binding.MapperRegistry;
 import org.apache.ibatis.session.SqlSessionFactory;
 
-import com.x62.tw.db.DataBaseConfig;
-import com.x62.tw.utils.MyBatisFactory;
+import com.x62.tw.TenWings;
 
 public abstract class TenWingsDao
 {
