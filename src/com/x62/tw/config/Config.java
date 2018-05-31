@@ -12,7 +12,7 @@ public class Config
 		private static final Config INSTANCE=new Config();
 	}
 
-	// private String basePath;
+	private String basePath;
 	private File webInf;
 
 	private Configuration configuration;
@@ -28,14 +28,14 @@ public class Config
 		return Loader.INSTANCE;
 	}
 
-	// public String getBasePath1()
-	// {
-	// return basePath;
-	// }
+	public String getBasePath()
+	{
+		return basePath;
+	}
 
 	public void setBasePath(String basePath)
 	{
-		// this.basePath=basePath;
+		this.basePath=basePath;
 		webInf=new File(basePath,"WEB-INF");
 		readConfiguration();
 	}

@@ -7,16 +7,17 @@ import javax.sql.DataSource;
 
 import org.apache.ibatis.datasource.pooled.PooledDataSource;
 
+import com.mysql.jdbc.AbandonedConnectionCleanupThread;
 import com.x62.tw.config.Config;
 
 public class DataSourceFactory
 {
-	private static Map<String,DataSource> ds=new HashMap<>();
+	private static Map<String,PooledDataSource> ds=new HashMap<>();
 	private static final String CHARSET="?useUnicode=true&characterEncoding=utf-8";
 
 	public static DataSource get(DataBaseConfig config)
 	{
-		DataSource dataSource=ds.get(config.id+config.dbName);
+		PooledDataSource dataSource=ds.get(config.id+config.dbName);
 		if(dataSource!=null)
 		{
 			return dataSource;
@@ -37,7 +38,7 @@ public class DataSourceFactory
 	public static DataSource getLocalMySQL()
 	{
 		DataBaseConfig config=Config.getInstance().getConfiguration().getConfig("LOCAL_MySQL");
-		DataSource dataSource=ds.get(config.id+config.dbName);
+		PooledDataSource dataSource=ds.get(config.id+config.dbName);
 		if(dataSource!=null)
 		{
 			return dataSource;
@@ -48,5 +49,24 @@ public class DataSourceFactory
 		ds.put(config.id+config.dbName,dataSource);
 
 		return dataSource;
+	}
+
+	public static void onDestroyed()
+	{
+		try
+		{
+			AbandonedConnectionCleanupThread.checkedShutdown();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		for(Map.Entry<String,PooledDataSource> entry:ds.entrySet())
+		{
+			PooledDataSource dataSource=entry.getValue();
+			dataSource.forceCloseAll();
+			// DriverManager.deregisterDriver(dataSource.getDriver());
+			
+		}
 	}
 }
