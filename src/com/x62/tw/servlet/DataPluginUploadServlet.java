@@ -15,8 +15,10 @@ import javax.servlet.http.Part;
 import com.x62.tw.config.Config;
 import com.x62.tw.config.Configuration;
 import com.x62.tw.dao.DataPluginDao;
+import com.x62.tw.dao.DataPluginDao.Bean;
 import com.x62.tw.pm.DataPluginManager;
 import com.x62.tw.result.BaseResult;
+import com.x62.tw.utils.DateUtils;
 import com.x62.tw.utils.IOUtils;
 import com.x62.tw.utils.JsonUtils;
 
@@ -26,16 +28,16 @@ public class DataPluginUploadServlet extends HttpServlet
 {
 	private static final long serialVersionUID=1L;
 
-	protected void doGet(HttpServletRequest request,HttpServletResponse response) throws ServletException,IOException
+	protected void doGet(HttpServletRequest req,HttpServletResponse resp) throws ServletException,IOException
 	{
-		doPost(request,response);
+		doPost(req,resp);
 	}
 
 	protected void doPost(HttpServletRequest req,HttpServletResponse resp) throws ServletException,IOException
 	{
-		req.setCharacterEncoding("utf-8");
-		resp.setCharacterEncoding("utf-8");
-		resp.setContentType("text/html;charset=utf-8");
+
+		ServletUtils.set(req,resp);
+
 		PrintWriter pw=resp.getWriter();
 		Config sysConfig=Config.getInstance();
 		Configuration configuration=sysConfig.getConfiguration();
@@ -50,33 +52,42 @@ public class DataPluginUploadServlet extends HttpServlet
 
 		// request.getServletContext().getRealPath("WEB-INF/plugins");
 
-		String root=sysConfig.getDataPluginsPath();
+		String pluginsRoot=sysConfig.getDataPluginsPath();
+
 		Part part=req.getPart("file");
 		String cd=part.getHeader("Content-Disposition");
 		// 截取不同类型的文件需要自行判断
-		String name=cd.substring(cd.lastIndexOf("=")+2,cd.length()-1);
+		String originalName=cd.substring(cd.lastIndexOf("=")+2,cd.length()-1);
 
-		String _name=name.substring(0,name.lastIndexOf("."));
+		String _name=originalName.substring(0,originalName.lastIndexOf("."));
 		// String filename=_name+"_"+UUID.randomUUID().toString().toUpperCase();
-		String filename=_name+"_"+System.currentTimeMillis();
-		File dir=new File(root,filename);
-		if(!dir.exists())
+		String time=DateUtils.getFileName();
+		String filename=_name+"_"+time;
+		File pluginsDir=new File(pluginsRoot,filename);
+		if(!pluginsDir.exists())
 		{
-			dir.mkdirs();
+			pluginsDir.mkdirs();
 		}
-		File file=new File(dir,name);
+		File file=new File(pluginsDir,originalName);
 		part.write(file.getAbsolutePath());
 
-		String from=file.getAbsolutePath();
-		String to=(new File(dir,_name).getAbsolutePath());
-		IOUtils.unzip(from,to);
+		String json=IOUtils.readConfigFileFromZip(file.getAbsolutePath());
+		Bean bean=JsonUtils.s2o(json,Bean.class);
 
-		File config=new File(to,"config.json");
-		com.x62.tw.dao.DataPluginDao.Bean bean=JsonUtils.f2o(config,com.x62.tw.dao.DataPluginDao.Bean.class);
-		bean.path=filename+File.separator+_name;
+		String key=bean.name+"-v"+bean.version;
+		// String from=file.getAbsolutePath();
+		File to=new File(pluginsDir,key);
+		IOUtils.unzip(file.getAbsolutePath(),to.getAbsolutePath());
+
+		// File config=new File(to,"config.json");
+		// com.x62.tw.dao.DataPluginDao.Bean
+		// bean=JsonUtils.f2o(config,com.x62.tw.dao.DataPluginDao.Bean.class);
+		File newFile=new File(pluginsRoot,key+"_"+time);
+		pluginsDir.renameTo(newFile);
+		bean.path=newFile.getName()+File.separator+to.getName();
 
 		DataPluginManager dpm=DataPluginManager.getInstance();
-		dpm.remove(bean.name+"-v"+bean.version);
+		dpm.remove(key);
 
 		DataPluginDao dao=new DataPluginDao();
 		dao.addOrUpdate(bean);

@@ -76,6 +76,21 @@ public class Config
 		return getPath("cache");
 	}
 
+	/**
+	 * 获取日志路径
+	 * 
+	 * @return
+	 */
+	public String getLogPath()
+	{
+		return getPath("logs");
+	}
+	
+	public String getTempPath()
+	{
+		return getPath("temp");
+	}
+
 	private void readConfiguration()
 	{
 		File config=new File(getClassPath(),"config.json");

@@ -19,7 +19,7 @@
 			"ip":"127.0.0.1",
 			"username":"root",
 			"password":"123456",
-			"dbName":"shunxin"
+			"dbName":"ShunXin"
 		},
 
 		{
@@ -27,7 +27,7 @@
 			"ip":"127.0.0.1",
 			"username":"root",
 			"password":"123456",
-			"dbName":"ten_wings"
+			"dbName":"ShunXin_TW"
 		}
 	]
 }

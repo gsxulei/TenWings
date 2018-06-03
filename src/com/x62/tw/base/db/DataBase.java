@@ -11,12 +11,14 @@ import com.x62.tw.utils.IOUtils;
 public class DataBase
 {
 	private DataBaseConfig config;
+	private DataBaseConfig mysql;
 
 	private DataSource ds;
 
 	public DataBase(DataBaseConfig config)
 	{
 		this.config=config;
+		mysql=getMySQL();
 		ds=DataSourceFactory.get(config);
 	}
 
@@ -53,7 +55,7 @@ public class DataBase
 		boolean result=false;
 		try
 		{
-			conn=DataSourceFactory.getLocalMySQL().getConnection();
+			conn=DataSourceFactory.get(mysql).getConnection();
 			statement=conn.createStatement();
 			rs=statement.executeQuery("show databases like '"+config.dbName+"'");
 			result=rs.next();
@@ -72,14 +74,16 @@ public class DataBase
 
 	public void createDataBase()
 	{
-		//execSQL("CREATE DATABASE IF NOT EXISTS "+config.dbName+" DEFAULT CHARSET utf8 COLLATE utf8_general_ci;");
+		// execSQL("CREATE DATABASE IF NOT EXISTS "+config.dbName+" DEFAULT
+		// CHARSET utf8 COLLATE utf8_general_ci;");
 		Connection conn=null;
 		Statement statement=null;
 		try
 		{
-			conn=DataSourceFactory.getLocalMySQL().getConnection();
+			conn=DataSourceFactory.get(mysql).getConnection();
 			statement=conn.createStatement();
-			statement.executeUpdate("CREATE DATABASE IF NOT EXISTS "+config.dbName+" DEFAULT CHARSET utf8 COLLATE utf8_general_ci;");
+			statement.executeUpdate(
+					"CREATE DATABASE IF NOT EXISTS "+config.dbName+" DEFAULT CHARSET utf8 COLLATE utf8_general_ci;");
 		}
 		catch(Exception e)
 		{
@@ -115,5 +119,17 @@ public class DataBase
 			IOUtils.close(rs,statement,conn);
 		}
 		return result;
+	}
+
+	private DataBaseConfig getMySQL()
+	{
+		DataBaseConfig mysql=new DataBaseConfig();
+		mysql.driver=config.driver;
+		mysql.ip=config.ip;
+		mysql.port=config.port;
+		mysql.username=config.username;
+		mysql.password=config.password;
+		mysql.id=config.id;
+		return mysql;
 	}
 }

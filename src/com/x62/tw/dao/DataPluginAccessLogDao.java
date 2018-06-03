@@ -1,5 +1,8 @@
 package com.x62.tw.dao;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.session.SqlSession;
 
@@ -15,9 +18,11 @@ public class DataPluginAccessLogDao extends TenWingsDao
 	}
 
 	@Override
-	public Class<?>[] getMappers()
+	public void addMappers()
 	{
-		return new Class<?>[]{Mapper.class};
+		List<Class<?>> mappers=new ArrayList<>();
+		mappers.add(Mapper.class);
+		addMappers(mappers);
 	}
 
 	public boolean add(Bean bean)

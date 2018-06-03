@@ -23,9 +23,11 @@ public class DataPluginDao extends TenWingsDao
 	}
 
 	@Override
-	public Class<?>[] getMappers()
+	public void addMappers()
 	{
-		return new Class<?>[]{Mapper.class};
+		List<Class<?>> mappers=new ArrayList<>();
+		mappers.add(Mapper.class);
+		addMappers(mappers);
 	}
 
 	public boolean addOrUpdate(Bean bean)
@@ -156,11 +158,13 @@ public class DataPluginDao extends TenWingsDao
 		void updatePath(@Param("path") String path,@Param("name") String name,@Param("version") int version);
 
 		@Select("select * from data_plugin")
-		@Results({@Result(property="name",column="plugin_name"),@Result(property="version",column="plugin_version")})
+		@Results(
+		{@Result(property="name",column="plugin_name"),@Result(property="version",column="plugin_version")})
 		List<Bean> findAll();
 
 		@Select("select * from data_plugin where plugin_name=#{name} and plugin_version=#{version}")
-		@Results({@Result(property="name",column="plugin_name"),@Result(property="version",column="plugin_version")})
+		@Results(
+		{@Result(property="name",column="plugin_name"),@Result(property="version",column="plugin_version")})
 		List<Bean> find(@Param("name") String name,@Param("version") int version);
 	}
 }

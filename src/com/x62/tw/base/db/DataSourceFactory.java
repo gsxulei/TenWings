@@ -1,5 +1,8 @@
 package com.x62.tw.base.db;
 
+import java.sql.Driver;
+import java.sql.DriverManager;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -51,8 +54,12 @@ public class DataSourceFactory
 		return dataSource;
 	}
 
-	public static void onDestroyed()
+	/**
+	 * 关闭数据库连接池,注销驱动
+	 */
+	public static void destroy()
 	{
+		//关闭MySQL清理线程
 		try
 		{
 			AbandonedConnectionCleanupThread.checkedShutdown();
@@ -61,12 +68,27 @@ public class DataSourceFactory
 		{
 			e.printStackTrace();
 		}
+
+		//关闭连接池
 		for(Map.Entry<String,PooledDataSource> entry:ds.entrySet())
 		{
 			PooledDataSource dataSource=entry.getValue();
 			dataSource.forceCloseAll();
-			// DriverManager.deregisterDriver(dataSource.getDriver());
-			
+		}
+
+		// 注销JDBC驱动时不会影响其他Web应用,getDrivers是根据ClassLoader返回驱动的
+		Enumeration<Driver> drivers=DriverManager.getDrivers();
+		while(drivers.hasMoreElements())
+		{
+			try
+			{
+				Driver driver=drivers.nextElement();
+				DriverManager.deregisterDriver(driver);
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+			}
 		}
 	}
 }

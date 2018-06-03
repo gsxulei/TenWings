@@ -31,20 +31,18 @@ public class ApiServlet extends HttpServlet
 		doPost(request,response);
 	}
 
-	protected void doPost(HttpServletRequest request,HttpServletResponse response) throws ServletException,IOException
+	protected void doPost(HttpServletRequest req,HttpServletResponse resp) throws ServletException,IOException
 	{
-		request.setCharacterEncoding("utf-8");
-		response.setCharacterEncoding("utf-8");
-		response.setContentType("text/html;charset=utf-8");
-		PrintWriter pw=response.getWriter();
+		ServletUtils.set(req,resp);
+		PrintWriter pw=resp.getWriter();
 
 		DataPluginAccessLogDao accessLogDao=new DataPluginAccessLogDao();
 		Bean log=new Bean();
 		log.accessDate=System.currentTimeMillis();
-		log.accessIp=request.getRemoteAddr();
-		log.accessPort=request.getRemotePort();
+		log.accessIp=ServletUtils.getRealIP(req);
+		log.accessPort=req.getRemotePort();
 
-		String param=request.getParameter("param");
+		String param=req.getParameter("param");
 		if(param==null||"".equals(param))
 		{
 			pw.write("{\"code\":\"1002\",\"msg\":\"参数错误\"}");

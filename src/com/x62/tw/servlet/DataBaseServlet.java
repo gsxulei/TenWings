@@ -35,9 +35,7 @@ public class DataBaseServlet extends HttpServlet
 	@Override
 	protected void doPost(HttpServletRequest req,HttpServletResponse resp) throws ServletException,IOException
 	{
-		req.setCharacterEncoding("utf-8");
-		resp.setCharacterEncoding("utf-8");
-		resp.setContentType("text/html;charset=utf-8");
+		ServletUtils.set(req,resp);
 
 		PrintWriter pw=resp.getWriter();
 		Config sysConfig=Config.getInstance();

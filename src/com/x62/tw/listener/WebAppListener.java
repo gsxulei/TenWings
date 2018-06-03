@@ -6,16 +6,18 @@ import javax.servlet.annotation.WebListener;
 
 import com.x62.tw.base.db.DataSourceFactory;
 import com.x62.tw.config.Config;
+import com.x62.tw.config.Version;
+import com.x62.tw.db.TenWingsDataBase;
 import com.x62.tw.pm.DataPluginManager;
 
 @WebListener
-public class StartInitListener implements ServletContextListener
+public class WebAppListener implements ServletContextListener
 {
 	@Override
 	public void contextDestroyed(ServletContextEvent sce)
 	{
-		DataSourceFactory.onDestroyed();
-		System.err.println("contextDestroyed");
+		DataSourceFactory.destroy();
+		System.out.println("TenWings "+Version.versionName+" 销毁");
 	}
 
 	/**
@@ -28,7 +30,9 @@ public class StartInitListener implements ServletContextListener
 		Config config=Config.getInstance();
 		config.setBasePath(basePath);
 
-		System.out.println("TenWings 1.1");
+		new TenWingsDataBase();
+
+		System.out.println("TenWings "+Version.versionName+" 启动");
 
 		// 加载接口插件
 		DataPluginManager dpm=DataPluginManager.getInstance();

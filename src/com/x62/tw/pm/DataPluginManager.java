@@ -13,6 +13,7 @@ import com.x62.tw.dao.DataPluginDao;
 import com.x62.tw.dao.DataPluginDao.Bean;
 import com.x62.tw.utils.IOUtils;
 import com.x62.tw.utils.JsonUtils;
+import com.x62.tw.utils.Utils;
 
 public class DataPluginManager
 {
@@ -37,6 +38,10 @@ public class DataPluginManager
 	{
 		File config=new File(path,"config.json");
 		String json=IOUtils.readFile(config.getAbsolutePath());
+		if(Utils.isEmpty(json))
+		{
+			return;
+		}
 		DataPluginBean bean=JsonUtils.s2o(json,DataPluginBean.class);
 		// System.err.println(bean.toString());
 		// System.err.println(getClass().getClassLoader());
