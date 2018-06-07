@@ -176,6 +176,14 @@ public class IOUtils
 
 				File file=new File(to,entry.getName());
 
+				//ZIP文件覆盖漏洞
+				//https://github.com/snyk/zip-slip-vulnerability
+				if(!file.getCanonicalPath().startsWith(to))
+				{
+					close(zin);
+					throw new RuntimeException("eval file "+file.getCanonicalPath());
+				}
+
 				// 使用Eclipse导出时会产生META-INF/MANIFEST.MF文件
 				// 但是没有识别出父目录,需要判断并创建
 				File parent=new File(file.getParent());
