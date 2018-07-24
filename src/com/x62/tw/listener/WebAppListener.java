@@ -37,5 +37,6 @@ public class WebAppListener implements ServletContextListener
 		// 加载接口插件
 		DataPluginManager dpm=DataPluginManager.getInstance();
 		dpm.initLoad();
+		System.out.println(dpm.get("SystemInfo-v1"));
 	}
 }

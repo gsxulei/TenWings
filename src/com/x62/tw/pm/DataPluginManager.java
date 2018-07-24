@@ -90,5 +90,7 @@ public class DataPluginManager
 			File file=new File(sysConfig.getDataPluginsPath(),bean.path);
 			add(file.getAbsolutePath());
 		}
+		// Bean b=dao.find("SystemInfo",1);
+		// System.out.println("b->"+b);
 	}
 }

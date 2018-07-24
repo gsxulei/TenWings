@@ -12,14 +12,18 @@ import org.apache.ibatis.annotations.Update;
 import org.apache.ibatis.session.SqlSession;
 
 import com.x62.tw.base.BaseBean;
+import com.x62.tw.base.db.MapperUtils;
 import com.x62.tw.base.db.TenWingsDao;
 import com.x62.tw.utils.IOUtils;
 
 public class DataPluginDao extends TenWingsDao
 {
+	private Mapper mapper;
+
 	public DataPluginDao()
 	{
 		super("twdb");
+		mapper=MapperUtils.getMapper(Mapper.class,"twdb");
 	}
 
 	@Override
@@ -100,44 +104,55 @@ public class DataPluginDao extends TenWingsDao
 	public Bean find(String name,int version)
 	{
 		Bean bean=null;
-		SqlSession session=factory.openSession();
-		try
+		// SqlSession session=factory.openSession();
+		// try
+		// {
+		// Mapper mapper=session.getMapper(Mapper.class);
+		// List<Bean> list=mapper.find(name,version);
+		// if(list!=null&&list.size()>0)
+		// {
+		// bean=list.get(0);
+		// }
+		// }
+		// catch(Exception e)
+		// {
+		// e.printStackTrace();
+		// }
+		// finally
+		// {
+		// IOUtils.close(session);
+		// }
+		List<Bean> list=mapper.find(name,version);
+		if(list!=null&&list.size()>0)
 		{
-			Mapper mapper=session.getMapper(Mapper.class);
-			List<Bean> list=mapper.find(name,version);
-			if(list!=null&&list.size()>0)
-			{
-				bean=list.get(0);
-			}
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
-		finally
-		{
-			IOUtils.close(session);
+			bean=list.get(0);
 		}
 		return bean;
 	}
 
 	public List<Bean> findAll()
 	{
-		List<Bean> list=new ArrayList<Bean>();
-		SqlSession session=factory.openSession();
-		try
+		List<Bean> list=mapper.findAll();
+		if(list==null)
 		{
-			Mapper mapper=session.getMapper(Mapper.class);
-			list=mapper.findAll();
+			list=new ArrayList<Bean>();
 		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
-		finally
-		{
-			IOUtils.close(session);
-		}
+		// Mapper mapper=MapperUtils.getMapper(Mapper.class,"twdb");
+
+		// SqlSession session=factory.openSession();
+		// try
+		// {
+		// Mapper mapper=session.getMapper(Mapper.class);
+		// list=mapper.findAll();
+		// }
+		// catch(Exception e)
+		// {
+		// e.printStackTrace();
+		// }
+		// finally
+		// {
+		// IOUtils.close(session);
+		// }
 		return list;
 	}
 
@@ -158,13 +173,11 @@ public class DataPluginDao extends TenWingsDao
 		void updatePath(@Param("path") String path,@Param("name") String name,@Param("version") int version);
 
 		@Select("select * from data_plugin")
-		@Results(
-		{@Result(property="name",column="plugin_name"),@Result(property="version",column="plugin_version")})
+		@Results({@Result(property="name",column="plugin_name"),@Result(property="version",column="plugin_version")})
 		List<Bean> findAll();
 
 		@Select("select * from data_plugin where plugin_name=#{name} and plugin_version=#{version}")
-		@Results(
-		{@Result(property="name",column="plugin_name"),@Result(property="version",column="plugin_version")})
+		@Results({@Result(property="name",column="plugin_name"),@Result(property="version",column="plugin_version")})
 		List<Bean> find(@Param("name") String name,@Param("version") int version);
 	}
 }
