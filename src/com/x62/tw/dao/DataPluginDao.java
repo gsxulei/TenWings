@@ -12,7 +12,6 @@ import org.apache.ibatis.annotations.Update;
 import org.apache.ibatis.session.SqlSession;
 
 import com.x62.tw.base.BaseBean;
-import com.x62.tw.base.db.MapperUtils;
 import com.x62.tw.base.db.TenWingsDao;
 import com.x62.tw.utils.IOUtils;
 
@@ -23,7 +22,7 @@ public class DataPluginDao extends TenWingsDao
 	public DataPluginDao()
 	{
 		super("twdb");
-		mapper=MapperUtils.getMapper(Mapper.class,"twdb");
+		mapper=getMapper(Mapper.class);
 	}
 
 	@Override

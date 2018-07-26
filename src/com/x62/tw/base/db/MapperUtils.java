@@ -7,7 +7,6 @@ import java.lang.reflect.Proxy;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
-import com.x62.tw.TenWings;
 import com.x62.tw.utils.IOUtils;
 
 public class MapperUtils
@@ -32,10 +31,10 @@ public class MapperUtils
 			{
 				session=factory.openSession();
 				Object object=session.getMapper(clazz);
-				System.err.println("-----");
+				// System.err.println("-----");
 				result=method.invoke(object,args);
 				session.commit();
-				System.err.println("commit");
+				// System.err.println("commit");
 			}
 			catch(Exception e)
 			{
@@ -49,13 +48,33 @@ public class MapperUtils
 		}
 	};
 
-	@SuppressWarnings("unchecked")
-	public static <T> T getMapper(Class<T> clazz,String configName)
-	{
-		DataBaseConfig config=TenWings.getInstance().getOptions(configName);
-		SqlSessionFactory factory=MyBatisFactory.get(config);
+	// @SuppressWarnings("unchecked")
+	// public static <T> T getMapper(Class<T> clazz,String configName)
+	// {
+	// DataBaseConfig config=TenWings.getInstance().getOptions(configName);
+	// SqlSessionFactory factory=MyBatisFactory.get(config);
+	//
+	// ClassLoader loader=MapperUtils.class.getClassLoader();
+	// Class<?>[] interfaces=new Class[]{clazz};
+	// ProxyHandler<?> handler=new ProxyHandler<>(clazz,factory);
+	// return (T)Proxy.newProxyInstance(loader,interfaces,handler);
+	// }
+	//
+	// @SuppressWarnings("unchecked")
+	// public static <T> T getMapper(Class<T> clazz,DataBaseConfig config)
+	// {
+	// SqlSessionFactory factory=MyBatisFactory.get(config);
+	//
+	// ClassLoader loader=MapperUtils.class.getClassLoader();
+	// Class<?>[] interfaces=new Class[]{clazz};
+	// ProxyHandler<?> handler=new ProxyHandler<>(clazz,factory);
+	// return (T)Proxy.newProxyInstance(loader,interfaces,handler);
+	// }
 
-		ClassLoader loader=MapperUtils.class.getClassLoader();
+	@SuppressWarnings("unchecked")
+	public static <T> T getMapper(Class<T> clazz,ClassLoader loader,SqlSessionFactory factory)
+	{
+		//ClassLoader loader=MapperUtils.class.getClassLoader();
 		Class<?>[] interfaces=new Class[]{clazz};
 		ProxyHandler<?> handler=new ProxyHandler<>(clazz,factory);
 		return (T)Proxy.newProxyInstance(loader,interfaces,handler);

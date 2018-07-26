@@ -4,17 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.session.SqlSession;
 
 import com.x62.tw.base.BaseBean;
 import com.x62.tw.base.db.TenWingsDao;
-import com.x62.tw.utils.IOUtils;
 
 public class DataPluginAccessLogDao extends TenWingsDao
 {
+	private Mapper mapper;
+
 	public DataPluginAccessLogDao()
 	{
 		super("twdb");
+		mapper=getMapper(Mapper.class);
 	}
 
 	@Override
@@ -28,22 +29,22 @@ public class DataPluginAccessLogDao extends TenWingsDao
 	public boolean add(Bean bean)
 	{
 		boolean result=true;
-		SqlSession session=factory.openSession();
+		// SqlSession session=factory.openSession();
 		try
 		{
-			Mapper mapper=session.getMapper(Mapper.class);
+			// Mapper mapper=session.getMapper(Mapper.class);
 			mapper.add(bean);
-			session.commit();
+			// session.commit();
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
 			result=false;
 		}
-		finally
-		{
-			IOUtils.close(session);
-		}
+		// finally
+		// {
+		// IOUtils.close(session);
+		// }
 		return result;
 	}
 
