@@ -1,7 +1,9 @@
 package com.x62.tw.base.db;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.lang.reflect.Field;
+import java.net.URL;
 
 import org.apache.ibatis.binding.MapperRegistry;
 import org.apache.ibatis.builder.xml.XMLMapperBuilder;
@@ -106,7 +108,7 @@ public abstract class TenWingsDao
 	/**
 	 * 绑定Mapper
 	 */
-	private void bindMapper()
+	private synchronized void bindMapper()
 	{
 		Field[] fields=getClass().getDeclaredFields();
 		MapperRegistry registry=factory.getConfiguration().getMapperRegistry();
@@ -118,8 +120,8 @@ public abstract class TenWingsDao
 			{
 				continue;
 			}
-			String path=mark.resource();
-			if(Utils.isEmpty(path))
+			String res=mark.resource();
+			if(Utils.isEmpty(res))
 			{
 				if(!registry.hasMapper(field.getType()))
 				{
@@ -128,10 +130,13 @@ public abstract class TenWingsDao
 			}
 			else
 			{
+				URL url=classLoader.getResource(res);
+				File file=new File(url.getFile());
+				String path=file.getAbsolutePath();
 				try
 				{
 					ClassLoader loader=Resources.getDefaultClassLoader();
-					System.out.println("loader->"+loader);
+					Resources.setDefaultClassLoader(classLoader);
 					FileInputStream fis=new FileInputStream(path);
 					XMLMapperBuilder builder=new XMLMapperBuilder(fis,configuration,path,
 							configuration.getSqlFragments());
