@@ -25,6 +25,17 @@ public class MapperUtils
 		@Override
 		public Object invoke(Object proxy,Method method,Object[] args) throws Throwable
 		{
+			if(Object.class.equals(method.getDeclaringClass()))
+			{
+				try
+				{
+					return method.invoke(this,args);
+				}
+				catch(Throwable t)
+				{
+					t.printStackTrace();
+				}
+			}
 			SqlSession session=null;
 			Object result=null;
 			try
@@ -35,6 +46,10 @@ public class MapperUtils
 				result=method.invoke(object,args);
 				session.commit();
 				// System.err.println("commit");
+				// if(result==null&&method.getReturnType().isAssignableFrom(List.class))
+				// {
+				// result=new ArrayList<>();
+				// }
 			}
 			catch(Exception e)
 			{
@@ -74,7 +89,7 @@ public class MapperUtils
 	@SuppressWarnings("unchecked")
 	public static <T> T getMapper(Class<T> clazz,ClassLoader loader,SqlSessionFactory factory)
 	{
-		//ClassLoader loader=MapperUtils.class.getClassLoader();
+		// ClassLoader loader=MapperUtils.class.getClassLoader();
 		Class<?>[] interfaces=new Class[]{clazz};
 		ProxyHandler<?> handler=new ProxyHandler<>(clazz,factory);
 		return (T)Proxy.newProxyInstance(loader,interfaces,handler);

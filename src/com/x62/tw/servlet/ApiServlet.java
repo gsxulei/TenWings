@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.Method;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -24,6 +26,7 @@ import com.x62.tw.utils.JsonUtils;
 @WebServlet("/API")
 public class ApiServlet extends HttpServlet
 {
+	private ExecutorService es=Executors.newCachedThreadPool();
 	private static final long serialVersionUID=1L;
 
 	protected void doGet(HttpServletRequest request,HttpServletResponse response) throws ServletException,IOException
@@ -33,7 +36,7 @@ public class ApiServlet extends HttpServlet
 
 	protected void doPost(HttpServletRequest req,HttpServletResponse resp) throws ServletException,IOException
 	{
-		ServletUtils.set(req,resp);
+		//ServletUtils.set(req,resp);
 		PrintWriter pw=resp.getWriter();
 
 		DataPluginAccessLogDao accessLogDao=new DataPluginAccessLogDao();

@@ -1,30 +1,29 @@
 package com.x62.tw.dao;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.ibatis.annotations.Insert;
 
 import com.x62.tw.base.BaseBean;
+import com.x62.tw.base.annotations.MapperMark;
 import com.x62.tw.base.db.TenWingsDao;
 
 public class DataPluginAccessLogDao extends TenWingsDao
 {
+	@MapperMark
 	private Mapper mapper;
 
 	public DataPluginAccessLogDao()
 	{
 		super("twdb");
-		mapper=getMapper(Mapper.class);
+		//mapper=getMapper(Mapper.class);
 	}
 
-	@Override
-	public void addMappers()
-	{
-		List<Class<?>> mappers=new ArrayList<>();
-		mappers.add(Mapper.class);
-		addMappers(mappers);
-	}
+//	@Override
+//	public void addMappers()
+//	{
+//		List<Class<?>> mappers=new ArrayList<>();
+//		mappers.add(Mapper.class);
+//		addMappers(mappers);
+//	}
 
 	public boolean add(Bean bean)
 	{

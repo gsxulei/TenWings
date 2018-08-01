@@ -35,8 +35,7 @@ public class DataPluginUploadServlet extends HttpServlet
 
 	protected void doPost(HttpServletRequest req,HttpServletResponse resp) throws ServletException,IOException
 	{
-
-		ServletUtils.set(req,resp);
+		//ServletUtils.set(req,resp);
 
 		PrintWriter pw=resp.getWriter();
 		Config sysConfig=Config.getInstance();

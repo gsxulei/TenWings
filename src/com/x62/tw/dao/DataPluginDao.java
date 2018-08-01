@@ -1,6 +1,5 @@
 package com.x62.tw.dao;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Insert;
@@ -12,26 +11,28 @@ import org.apache.ibatis.annotations.Update;
 import org.apache.ibatis.session.SqlSession;
 
 import com.x62.tw.base.BaseBean;
+import com.x62.tw.base.annotations.MapperMark;
 import com.x62.tw.base.db.TenWingsDao;
 import com.x62.tw.utils.IOUtils;
 
 public class DataPluginDao extends TenWingsDao
 {
+	@MapperMark()
 	private Mapper mapper;
 
 	public DataPluginDao()
 	{
 		super("twdb");
-		mapper=getMapper(Mapper.class);
+		// mapper=getMapper(Mapper.class);
 	}
 
-	@Override
-	public void addMappers()
-	{
-		List<Class<?>> mappers=new ArrayList<>();
-		mappers.add(Mapper.class);
-		addMappers(mappers);
-	}
+	// @Override
+	// public void addMappers()
+	// {
+	// List<Class<?>> mappers=new ArrayList<>();
+	// mappers.add(Mapper.class);
+	// addMappers(mappers);
+	// }
 
 	public boolean addOrUpdate(Bean bean)
 	{
@@ -131,11 +132,11 @@ public class DataPluginDao extends TenWingsDao
 
 	public List<Bean> findAll()
 	{
-		List<Bean> list=mapper.findAll();
-		if(list==null)
-		{
-			list=new ArrayList<Bean>();
-		}
+		// List<Bean> list=mapper.findAll();
+		// if(list==null)
+		// {
+		// list=new ArrayList<Bean>();
+		// }
 		// Mapper mapper=MapperUtils.getMapper(Mapper.class,"twdb");
 
 		// SqlSession session=factory.openSession();
@@ -152,7 +153,7 @@ public class DataPluginDao extends TenWingsDao
 		// {
 		// IOUtils.close(session);
 		// }
-		return list;
+		return mapper.findAll();
 	}
 
 	public static class Bean extends BaseBean
