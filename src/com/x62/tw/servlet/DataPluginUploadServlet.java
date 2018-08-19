@@ -14,8 +14,7 @@ import javax.servlet.http.Part;
 
 import com.x62.tw.config.Config;
 import com.x62.tw.config.Configuration;
-import com.x62.tw.dao.DataPluginDao;
-import com.x62.tw.dao.DataPluginDao.Bean;
+import com.x62.tw.pm.DataPluginBean;
 import com.x62.tw.pm.DataPluginManager;
 import com.x62.tw.result.BaseResult;
 import com.x62.tw.utils.DateUtils;
@@ -35,7 +34,7 @@ public class DataPluginUploadServlet extends HttpServlet
 
 	protected void doPost(HttpServletRequest req,HttpServletResponse resp) throws ServletException,IOException
 	{
-		//ServletUtils.set(req,resp);
+		// ServletUtils.set(req,resp);
 
 		PrintWriter pw=resp.getWriter();
 		Config sysConfig=Config.getInstance();
@@ -71,9 +70,11 @@ public class DataPluginUploadServlet extends HttpServlet
 		part.write(file.getAbsolutePath());
 
 		String json=IOUtils.readConfigFileFromZip(file.getAbsolutePath());
-		Bean bean=JsonUtils.s2o(json,Bean.class);
+		// Bean bean=JsonUtils.s2o(json,Bean.class);
 
-		String key=bean.name+"-v"+bean.version;
+		DataPluginBean bean=JsonUtils.s2o(json,DataPluginBean.class);
+
+		String key=bean.getKey();
 		// String from=file.getAbsolutePath();
 		File to=new File(pluginsDir,key);
 		IOUtils.unzip(file.getAbsolutePath(),to.getAbsolutePath());
@@ -86,10 +87,11 @@ public class DataPluginUploadServlet extends HttpServlet
 		bean.path=newFile.getName()+File.separator+to.getName();
 
 		DataPluginManager dpm=DataPluginManager.getInstance();
-		dpm.remove(key);
+		// dpm.remove(key);
+		dpm.addOrUpdate(bean);
 
-		DataPluginDao dao=new DataPluginDao();
-		dao.addOrUpdate(bean);
+		// DataPluginDao dao=new DataPluginDao();
+		// dao.addOrUpdate(bean);
 
 		BaseResult result=BaseResult.getSuccess("接口插件上传成功");
 		pw.write(result.toString());

@@ -8,4 +8,9 @@ public class DataReqParam extends BaseBean
 	public int version;
 	public String param;
 	public String sign="{}";
+
+	public String getKey()
+	{
+		return name+"-v"+version;
+	}
 }

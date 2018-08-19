@@ -30,13 +30,12 @@ public class WebAppListener implements ServletContextListener
 		Config config=Config.getInstance();
 		config.setBasePath(basePath);
 
-		new TenWingsDataBase();
+		//new TenWingsDataBase();
 
 		System.out.println("TenWings "+Version.versionName+" 启动");
 
 		// 加载接口插件
 		DataPluginManager dpm=DataPluginManager.getInstance();
-		dpm.initLoad();
-		System.out.println(dpm.get("SystemInfo-v1"));
+		dpm.init();
 	}
 }

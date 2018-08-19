@@ -225,11 +225,16 @@ public class IOUtils
 
 	public static String readFile(String path)
 	{
+		File file=new File(path);
+		if(!file.exists())
+		{
+			return "";
+		}
 		StringBuilder result=new StringBuilder();
 		BufferedReader reader=null;
 		try
 		{
-			reader=new BufferedReader(new FileReader(path));
+			reader=new BufferedReader(new FileReader(file));
 			String line="";
 			while((line=reader.readLine())!=null)
 			{

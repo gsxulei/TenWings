@@ -20,7 +20,7 @@ import com.x62.tw.servlet.ServletUtils;
  * @author GSXL
  *
  */
-@WebFilter("/*")
+@WebFilter(urlPatterns={"/*"},asyncSupported=true)
 public class CharacterEncodingFilter implements Filter
 {
 	@Override

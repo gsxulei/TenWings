@@ -48,4 +48,15 @@ public class JsonUtils
 	{
 		return f2o(file.getAbsolutePath(),t);
 	}
+
+	public static void o2f(File file,Object obj)
+	{
+		o2f(file.getAbsolutePath(),obj);
+	}
+
+	public static void o2f(String path,Object obj)
+	{
+		String content=o2s(obj);
+		IOUtils.write(path,content);
+	}
 }

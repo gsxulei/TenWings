@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
+import org.apache.ibatis.logging.stdout.StdOutImpl;
 import org.apache.ibatis.mapping.Environment;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -27,6 +28,7 @@ public class MyBatisFactory
 		TransactionFactory transactionFactory=new JdbcTransactionFactory();
 		Environment environment=new Environment("development",transactionFactory,dataSource);
 		Configuration configuration=new Configuration(environment);
+		configuration.setLogImpl(StdOutImpl.class);
 		factory=new SqlSessionFactoryBuilder().build(configuration);
 		sessions.put(classLoader.hashCode()+config.id,factory);
 		return factory;
