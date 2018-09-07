@@ -7,7 +7,6 @@ import javax.servlet.annotation.WebListener;
 import com.x62.tw.base.db.DataSourceFactory;
 import com.x62.tw.config.Config;
 import com.x62.tw.config.Version;
-import com.x62.tw.db.TenWingsDataBase;
 import com.x62.tw.pm.DataPluginManager;
 
 @WebListener
